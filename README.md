@@ -1,1 +1,0 @@
-# startap_semestr2
