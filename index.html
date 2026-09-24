@@ -11,8 +11,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113000599', 'ym');
+
+        ym(113000599, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/113000599" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
 </head>
 <body>
+<!-- Yandex Metrica noscript -->
+<noscript><div><img src="https://mc.yandex.ru/watch/113000599 style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex Metrica noscript -->
 
 <header>
     <div class="wrap nav">
@@ -26,7 +42,7 @@
             <a href="#features">Возможности</a>
             <a href="#pricing">Тарифы</a>
         </nav>
-        <a href="#contact" class="btn btn-primary nav-cta">Связаться с нами</a>
+        <a href="#contact" class="btn btn-primary nav-cta" data-metrika-goal="contact_click">Связаться с нами</a>
     </div>
 </header>
 
@@ -245,8 +261,8 @@
             <h2>Хотите протестировать СоставОК или обсудить сотрудничество?</h2>
             <p>Собираем группу закрытого тестирования и открыты к разговору с будущими инвесторами и партнёрами.</p>
             <div class="cta-actions">
-                <a href="mailto:hello@sostavok.app" class="btn btn-ghost-on-dark">Написать на почту</a>
-                <a href="https://t.me/sostavok_app" class="btn btn-ghost-on-dark">Написать в Telegram</a>
+                <a href="mailto:hello@sostavok.app" class="btn btn-ghost-on-dark" data-metrika-goal="email_click">Написать на почту</a>
+                <a href="https://t.me/sostavok_app" class="btn btn-ghost-on-dark" data-metrika-goal="telegram_click">Написать в Telegram</a>
             </div>
         </div>
     </section>
@@ -262,14 +278,91 @@
                 <span class="wordmark" style="font-size:18px;"><span class="c1">Состав</span><span class="c2">ОК</span></span>
             </a>
             <ul class="footer-links">
-                <li><a href="mailto:partnership@sostavok.app">✉︎ partnership@sostavok.app</a></li>
-                <li><a href="https://t.me/sostavok_app">🗪 @sostavok_app</a></li>
+                <li><a href="mailto:partnership@sostavok.app" data-metrika-goal="email_click">✉︎ partnership@sostavok.app</a></li>
+                <li><a href="https://t.me/sostavok_app" data-metrika-goal="telegram_click">🗪 @sostavok_app</a></li>
                 <li><a href="#top">Наверх</a></li>
             </ul>
         </div>
         <p class="footer-copy">© 2025-2026 СоставОК. Все права защищены.</p>
     </div>
 </footer>
+<script>
+    (function () {
+        // Все цели создаются в Яндекс Метрике с типом «Целевое событие».
+        // Вызов reachGoal отправляет событие в соответствующий счетчик.
+        const counterId = 113000599; // ЗАМЕНИТЕ на ID вашего счетчика
+
+        function reachGoal(goalName, params) {
+            if (typeof ym !== 'function') return;
+            ym(counterId, 'reachGoal', goalName, params || {});
+        }
+
+        // 1. Клик по CTA «Связаться с нами».
+        document.querySelectorAll('[data-metrika-goal="contact_click"]').forEach(function (element) {
+            element.addEventListener('click', function () {
+                reachGoal('contact_click');
+            });
+        });
+
+        // 2. Клик по e-mail.
+        document.querySelectorAll('[data-metrika-goal="email_click"]').forEach(function (element) {
+            element.addEventListener('click', function () {
+                reachGoal('email_click');
+            });
+        });
+
+        // 3. Клик по Telegram.
+        document.querySelectorAll('[data-metrika-goal="telegram_click"]').forEach(function (element) {
+            element.addEventListener('click', function () {
+                reachGoal('telegram_click');
+            });
+        });
+
+        // 4. Пользователь действительно дошёл до блока с тарифами.
+        // Событие отправляется только один раз за загрузку страницы.
+        const pricingSection = document.getElementById('pricing');
+        let pricingTracked = false;
+
+        if (pricingSection && 'IntersectionObserver' in window) {
+            const pricingObserver = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting && !pricingTracked) {
+                        pricingTracked = true;
+                        reachGoal('pricing_view');
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            pricingObserver.observe(pricingSection);
+        }
+
+        // 5. Глубокий просмотр страницы — пользователь прокрутил минимум 75%.
+        // Событие отправляется только один раз за загрузку страницы.
+        let deepViewTracked = false;
+
+        function checkDeepView() {
+            if (deepViewTracked) return;
+
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const documentHeight = Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight
+            );
+            const viewportHeight = window.innerHeight;
+            const progress = (scrollTop + viewportHeight) / documentHeight;
+
+            if (progress >= 0.75) {
+                deepViewTracked = true;
+                reachGoal('deep_view');
+                window.removeEventListener('scroll', checkDeepView);
+            }
+        }
+
+        window.addEventListener('scroll', checkDeepView, { passive: true });
+        checkDeepView();
+    })();
+</script>
 <script>
     (function () {
         const carousel = document.getElementById('stepsCarousel');
